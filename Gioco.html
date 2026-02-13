@@ -10,11 +10,19 @@
 <body onload="startGame()">
     <div id="gameContainer">
         <h1 id="si">Gioco Crazy!</h1>
-        <button id="startButton" onclick="startGame()">Inizia</button>
-        <button id="moveup" onclick="moveup()">Su</button>
-        <button id="movedown" onclick="movedown()">Giù</button>
-        <button id="moveleft" onclick="moveleft()">Sinistra</button>
-        <button id="moveright" onclick="moveright()">Destra</button>
+        <div class="controls">
+            <div class="row">
+                <button id="moveup" onclick="moveup()">Su</button>
+            </div>
+            
+            <div class="row">
+                <button id="moveleft" onclick="moveleft()">Sinistra</button>
+                <button id="moveright" onclick="moveright()">Destra</button>
+            </div>
+            <div class="row">
+                <button id="movedown" onclick="movedown()">Giù</button>
+            </div>
+        </div>
     </div>
    
 </body>
