@@ -3,7 +3,10 @@ var redSquare = {
     height: 20,
     x: 10,
     y: 120,
-    color: "red"
+    color: "red",
+    speedX : 0,
+    speedY: 0  
+    
 };
 
 function startGame() {
@@ -42,20 +45,38 @@ function updateGameArea() {
 
     myGameArea.draw(redSquare);
 }
+redSquare.speedX = 0;
+redSquare.speedY = 0;
+
+// Loop di animazione
+setInterval(() => {
+  redSquare.x += redSquare.speedX;
+  redSquare.y += redSquare.speedY;
+  // Ridisegna il quadrato
+}, 100);
+
+// Bottoni per controllare la direzione
+
+
 
 
 function moveup() {
-    redSquare.y -= 10; 
+redSquare.speedY = -10;
 }
 
 function movedown() {
-    redSquare.y += 10; 
+redSquare.speedY = 10;
 }
 
 function moveleft() {
-    redSquare.x -= 10; 
+redSquare.speedX = -10;
 }
 
 function moveright() {
-    redSquare.x += 10; 
+redSquare.speedX = 10;
+}
+
+function clearmove() {
+    redSquare.speedX = 0; 
+    redSquare.speedY = 0; 
 }
