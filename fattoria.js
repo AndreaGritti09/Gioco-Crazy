@@ -36,13 +36,13 @@
     }
 
 	function b2(){
-    	document.getElementById("a1").innerHTML= 
+    	document.getElementById("a2").innerHTML= 
         "Specie: " + animale2.specie + " Razza: " + animale2.razza + " Zampe: " + animale2.zampe + " Dieta: " + animale2.dieta.tipo + " Quantità: " + animale2.dieta.quantità
         console.log("la dieta di questo cane è equilibrata per il suo fabbisogno giornaliero")
     }
     
     function b3(){
-    	document.getElementById("a1").innerHTML= 
+    	document.getElementById("a3").innerHTML= 
         "Specie: " + animale3["specie"] + " Razza: " + animale3["razza"] + " Zampe: " + animale3["zampe"] + " Dieta: " + animale3["dieta"].tipo + " Quantità: " + animale3["dieta"].quantità
         console.log("la dieta di questa gallina è equilibrata per il suo fabbisogno giornaliero")
     }

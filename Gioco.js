@@ -9,11 +9,59 @@ var redSquare = {
     
 };
 
+var animatedObject = {
+  speedX: 0,
+  speedY: 0,
+  width: 60,
+  height: 60,
+  x: 10,
+  y: 120,
+  imageList: [], //Vettore che conterrà tutte le immagini caricate
+  contaFrame: 0, //Tiene conto di quanti frame sono passati
+  actualFrame: 0, //Specifica quale frame disegnare
+
+  update: function() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.contaFrame++;
+    if (this.contaFrame == 50) {
+      this.contaFrame = 0;
+      this.actualFrame = (1 + this.actualFrame) % this.imageList.length;
+      //console.log(this.actualFrame);
+      this.image = this.imageList[this.actualFrame];
+    }
+  },
+
+  loadImages: function() {
+    this.image = new Image(this.width, this.height);
+    this.image.src = "https://i.ibb.co/TqYNwMCW/Idle-7.png";
+     for (imgPath of running) {
+      var img = new Image(this.width, this.height);
+      img.src = imgPath;
+      this.imageList.push(img);
+      //console.log(img);
+    }
+    this.image = this.imageList[this.actualFrame];
+  }
+};
+
+
+
 function startGame() {
     myGameArea.start();
+    animatedObject.loadImages();
 }
 
 var myGameArea = {
+    drawGameObject: function(gameObject) {
+    this.context.drawImage(
+      gameObject.image,
+      gameObject.x,
+      gameObject.y,
+      gameObject.width,
+      gameObject.height
+    )
+    },
     canvas : document.createElement("canvas"),
     start : function() {
         this.canvas.width = 480;
@@ -36,14 +84,15 @@ var myGameArea = {
         this.context.fillStyle = component.color;
         this.context.fillRect(component.x, component.y, component.width, component.height);
     }
+    
 }
 
 function updateGameArea() {
 
     myGameArea.clear();
-    
-
     myGameArea.draw(redSquare);
+    animatedObject.update();
+    myGameArea.drawGameObject(animatedObject);
 }
 redSquare.speedX = 0;
 redSquare.speedY = 0;
@@ -80,3 +129,4 @@ function clearmove() {
     redSquare.speedX = 0; 
     redSquare.speedY = 0; 
 }
+
