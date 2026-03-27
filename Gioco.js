@@ -142,7 +142,7 @@ function updateGameArea() {
         myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
     }
     
-    for (i = 0; i < myObstacles.length; i += 1) {
+    for (i = 0; i < myObstacles.length; i += 9) {
         myObstacles[i].speedX = -1;
         myObstacles[i].newPos();
         myObstacles[i].update();
