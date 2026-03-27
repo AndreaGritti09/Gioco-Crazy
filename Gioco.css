@@ -1,17 +1,86 @@
-canvas {
-    border: 1px solid #d3d3d3;
-    background-color: #f1f1f1;
-}
+
+
+/* Resettiamo i margini e centriamo tutto al centro dello schermo */
 body {
-    text-align: center;
-    background-color: orange;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    /* Il background animato super crazy */
+    background: linear-gradient(45deg, #ff00cc, #333399, #00ffcc, #ff00cc);
+    background-size: 400% 400%;
+    animation: crazyBackground 10s ease infinite;
+    font-family: 'Consolas', monospace;
+    overflow: hidden; /* Niente barre di scorrimento fastidiose */
 }
+
+/* Animazione che fa scorrere i colori dello sfondo all'infinito */
+@keyframes crazyBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Stile per il nostro Canvas (il campo di gioco) */
+canvas {
+    background-color: #111 !important; /* Sfondo scuro per far risaltare il personaggio e i tubi */
+    border: 3px solid #fff;
+    border-radius: 15px; /* Bordi arrotondati */
+    
+    /* Un'ombra fluo pazzesca (esterna e interna) */
+    box-shadow: 0 0 20px #00ffcc, 0 0 40px #ff00cc, inset 0 0 15px #333399;
+    
+    transform: scale(1.1); /* Lo facciamo un po' più grande di base */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Effetto: se ci passi sopra col mouse, l'aura fluo si ingigantisce */
+canvas:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 30px #ff00cc, 0 0 60px #00ffcc, inset 0 0 25px #ff00cc;
+}
+
+/* --- SEZIONE BOTTONI --- */
+/* Se hai messo dei bottoni nell'HTML per chiamare moveup(), movedown() ecc, li trucchiamo così: */
 .controls {
-    margin-top: 20px;       
-    text-align: center;     
+    margin-top: 50px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
+button {
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #00ffcc;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px #00ffcc;
+    transition: all 0.2s;
+}
 
+/* Quando passi il mouse sui bottoni, si accendono */
+button:hover {
+    background: #00ffcc;
+    color: #000;
+    box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc;
+    transform: translateY(-3px); /* Effetto sollevamento */
+}
+
+/* Quando clicchi il bottone, si schiaccia */
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0 0 5px #00ffcc;
+}
 .row {
     margin: 5px 0;          
 }
@@ -25,4 +94,3 @@ button {
 .row button + button {
     margin-left: 10px;      
 }
-

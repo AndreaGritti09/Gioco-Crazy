@@ -8,21 +8,23 @@
     <script src="Gioco.js" defer></script>
     <script src="Sprite.js" defer></script>
 </head>
+<h1 id="si">GIOCO CRAZY!</h1>
 <body onload="startGame()">
     <div id="gameContainer">
-        <h1 id="si">Gioco Crazy!</h1>
+        
         <div class="controls">
             <div class="row">
-               <button onmousedown="moveup()" onmouseup="clearmove()">UP</button><br><br>
+               <button onmousedown="moveleft()" onmouseup="clearmove()">LEFT</button>
+                
             </div>
             
             <div class="row">
-                <button onmousedown="moveleft()" onmouseup="clearmove()">LEFT</button>
-                <button onmousedown="moveright()" onmouseup="clearmove()">RIGHT</button><br><br>
+                <button onmousedown="moveup()" onmouseup="clearmove()">UP</button><br><br>
+                <button onmousedown="movedown()" onmouseup="clearmove()">DOWN</button>
 
             </div>
             <div class="row">
-               <button onmousedown="movedown()" onmouseup="clearmove()">DOWN</button>
+               <button onmousedown="moveright()" onmouseup="clearmove()">RIGHT</button><br><br>
             </div>
         </div>
     </div>
