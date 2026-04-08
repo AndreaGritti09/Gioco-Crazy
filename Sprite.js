@@ -1,4 +1,4 @@
-var running = [
+var cavaliere = [
     "https://i.ibb.co/hxyJSJXp/Run-1.png",
     "https://i.ibb.co/4gDdDBfT/Run-2.png",
     "https://i.ibb.co/zHXJ9jfw/Run-3.png",

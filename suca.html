@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototipo Super Mario - Scrolling</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: sans-serif;
+            color: white;
+        }
+        canvas {
+            background-color: #5c94fc;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            border: 4px solid #fff;
+            border-radius: 8px;
+        }
+        p { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <p>🎮 <b>Controlli:</b> Frecce Sinistra/Destra per muoverti, Freccia Su per saltare. Vai verso destra per far scorrere lo schermo!</p>
+    
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+    <script>
+       // Variabili globali per la fisica e la telecamera
+var cameraX = 0;
+var gravity = 0.6;
+var friction = 0.8;
+var keys = { ArrowRight: false, ArrowLeft: false, ArrowUp: false };
+
+// Ascolto degli eventi della tastiera
+window.addEventListener('keydown', function(e) {
+    if (keys.hasOwnProperty(e.code)) keys[e.code] = true;
+});
+window.addEventListener('keyup', function(e) {
+    if (keys.hasOwnProperty(e.code)) keys[e.code] = false;
+});
+
+var animatedObject = {
+  speedX: 0,
+  speedY: 0,
+  width: 50,
+  height: 50,
+  x: 50,
+  y: 120,
+  jumpPower: -12,
+  grounded: false,
+  imageList: [],
+  contaFrame: 0,
+  actualFrame: 0,
+  image: null,
+
+  update: function() {
+    // 1. Gestione Input
+    if (keys.ArrowRight) this.speedX += 1;
+    if (keys.ArrowLeft) this.speedX -= 1;
+    if (keys.ArrowUp && this.grounded) {
+        this.speedY = this.jumpPower;
+        this.grounded = false;
+    }
+
+    // 2. Fisica
+    this.speedX *= friction;
+    this.speedY += gravity;
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    // 3. Logica della Telecamera (Scrolling)
+    if (this.x > cameraX + myGameArea.canvas.width / 2) {
+        cameraX = this.x - myGameArea.canvas.width / 2;
+    }
+    // Muro invisibile per non tornare indietro
+    if (this.x < cameraX) {
+        this.x = cameraX;
+        this.speedX = 0;
+    }
+
+    // 4. Morte (caduta nel vuoto) e Respawn
+    if (this.y > myGameArea.canvas.height + 100) {
+        this.x = cameraX + 50;
+        this.y = 50;
+        this.speedY = 0;
+    }
+
+    // 5. Animazione Sprite
+    this.contaFrame++;
+    if (this.contaFrame == 7 && this.imageList.length > 0) {
+      this.contaFrame = 0;
+      this.actualFrame = (1 + this.actualFrame) % this.imageList.length;
+      this.image = this.imageList[this.actualFrame];
+    }
+  },
+
+  loadImages: function() {
+     // Assicurati che "cavaliere" esista nel tuo script principale!
+     if (typeof cavaliere !== 'undefined') {
+         for (let imgPath of cavaliere) { 
+           var img = new Image(this.width, this.height);
+           img.src = imgPath;
+           this.imageList.push(img);
+         }
+         this.image = this.imageList[this.actualFrame];
+     }
+  }
+};
+
+var myObstacles = [];
+var myScore;
+
+function startGame() {
+    myGameArea.start();
+    // Punteggio fisso in alto a sinistra (non influenzato dalla telecamera)
+    myScore = new component("20px", "Consolas", "white", 10, 30, "text");
+
+    // Creazione del livello: piattaforme statiche invece di tubi casuali
+    myObstacles.push(new component(3000, 50, "green", 0, 250, "rect")); // Pavimento base
+    myObstacles.push(new component(150, 20, "brown", 250, 180, "rect")); // Piattaforma 1
+    myObstacles.push(new component(150, 20, "brown", 500, 120, "rect")); // Piattaforma 2
+    myObstacles.push(new component(60, 100, "green", 800, 150, "rect")); // Ostacolo alto
+    myObstacles.push(new component(200, 20, "brown", 1000, 200, "rect")); // Piattaforma 3
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        animatedObject.loadImages();  
+        this.canvas.width = 480;
+        this.canvas.height = 270;
+        this.canvas.style.backgroundColor = "#5c94fc"; // Sfondo azzurro cielo
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frameNo = 0;
+        this.interval = setInterval(updateGameArea, 20);
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+    stop : function() {
+        clearInterval(this.interval);
+    },
+    drawGameObject: function(gameObject) {
+        if (gameObject.image) {
+            this.context.drawImage(
+              gameObject.image,
+              gameObject.x - cameraX, // Applica lo scrolling
+              gameObject.y,
+              gameObject.width,
+              gameObject.height
+            );
+        } else {
+            // Fallback se le immagini non si caricano (disegna un quadrato rosso)
+            this.context.fillStyle = "red";
+            this.context.fillRect(gameObject.x - cameraX, gameObject.y, gameObject.width, gameObject.height);
+        }
+    }
+}
+
+function component(width, height, color, x, y, type) {
+    this.type = type;
+    this.width = width;
+    this.height = height;
+    this.color = color;
+    this.x = x;
+    this.y = y;    
+
+    this.update = function() {
+        var ctx = myGameArea.context;
+        if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = this.color;
+            // Il testo UI non è influenzato dalla telecamera
+            ctx.fillText(this.text, this.x, this.y); 
+        } else {
+            ctx.fillStyle = this.color;
+            // Gli ostacoli scorrono con la telecamera
+            ctx.fillRect(this.x - cameraX, this.y, this.width, this.height);
+        }
+    }
+}
+
+function updateGameArea() {
+    myGameArea.clear();
+    
+    // Aggiorna posizione, fisica e telecamera del giocatore
+    animatedObject.update();
+
+    // Rilevamento Collisioni Piattaforme
+    animatedObject.grounded = false;
+    for (let i = 0; i < myObstacles.length; i++) {
+        let plat = myObstacles[i];
+        
+        // Controllo sovrapposizione
+        if (animatedObject.x < plat.x + plat.width &&
+            animatedObject.x + animatedObject.width > plat.x &&
+            animatedObject.y < plat.y + plat.height &&
+            animatedObject.y + animatedObject.height > plat.y) {
+            
+            // Atterraggio (sopra)
+            if (animatedObject.speedY > 0 && animatedObject.y + animatedObject.height - animatedObject.speedY <= plat.y) {
+                animatedObject.grounded = true;
+                animatedObject.speedY = 0;
+                animatedObject.y = plat.y - animatedObject.height;
+            }
+            // Testata (sotto)
+            else if (animatedObject.speedY < 0 && animatedObject.y - animatedObject.speedY >= plat.y + plat.height) {
+                animatedObject.speedY = 0;
+                animatedObject.y = plat.y + plat.height;
+            }
+            // Collisione Destra
+            else if (animatedObject.speedX > 0 && animatedObject.x + animatedObject.width - animatedObject.speedX <= plat.x) {
+                animatedObject.speedX = 0;
+                animatedObject.x = plat.x - animatedObject.width;
+            }
+            // Collisione Sinistra
+            else if (animatedObject.speedX < 0 && animatedObject.x - animatedObject.speedX >= plat.x + plat.width) {
+                animatedObject.speedX = 0;
+                animatedObject.x = plat.x + plat.width;
+            }
+        }
+    }
+
+    // Disegna le piattaforme
+    for (let i = 0; i < myObstacles.length; i += 1) {
+        myObstacles[i].update();
+    }
+    
+    // Disegna il personaggio
+    myGameArea.drawGameObject(animatedObject);
+
+    // Aggiorna il punteggio basato sulla distanza percorsa
+    myScore.text = "DISTANZA: " + Math.floor(cameraX);
+    myScore.update();
+}
+
+// Funzioni per bottoni touch (opzionali, se hai un'interfaccia mobile)
+function moveup() { keys.ArrowUp = true; }
+function moveleft() { keys.ArrowLeft = true; }
+function moveright() { keys.ArrowRight = true; }
+function clearmove() { keys.ArrowUp = false; keys.ArrowLeft = false; keys.ArrowRight = false; }
+    </script>
+</body>
+</html>

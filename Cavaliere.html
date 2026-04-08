@@ -1,33 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="Gioco.css">
-    <script src="Gioco.js" defer></script>
+    <link rel="stylesheet" href="Cavaliere.css">
+    
     <script src="Sprite.js" defer></script>
+    <script src="Cavaliere.js" defer></script>
 </head>
-<h1 id="si">GIOCO CRAZY!</h1>
 <body onload="startGame()">
+    <h1 id="si">GIOCO CRAZY!</h1>
+    
     <div id="gameContainer">
-        
         <div class="controls">
             <div class="row">
                <button onmousedown="moveleft()" onmouseup="clearmove()">LEFT</button>
-                
             </div>
             
             <div class="row">
                 <button onmousedown="moveup()" onmouseup="clearmove()">UP</button><br><br>
                 <button onmousedown="movedown()" onmouseup="clearmove()">DOWN</button>
-
             </div>
+            
             <div class="row">
                <button onmousedown="moveright()" onmouseup="clearmove()">RIGHT</button><br><br>
             </div>
         </div>
     </div>
-   
 </body>
 </html>

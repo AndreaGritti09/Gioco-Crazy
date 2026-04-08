@@ -27,7 +27,6 @@ body {
 
 /* Stile per il nostro Canvas (il campo di gioco) */
 canvas {
-    background-color: #111 !important; /* Sfondo scuro per far risaltare il personaggio e i tubi */
     border: 3px solid #fff;
     border-radius: 15px; /* Bordi arrotondati */
     

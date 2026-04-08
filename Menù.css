@@ -1,0 +1,23 @@
+.btn-crazy {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #00ffcc;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-decoration: none; /* Toglie la fastidiosa sottolineatura blu dei link */
+    box-shadow: 0 0 10px #00ffcc;
+    transition: all 0.2s;
+    font-family: 'Consolas', monospace;
+}
+
+.btn-crazy:hover {
+    background: #00ffcc;
+    color: #000;
+    box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc;
+    transform: translateY(-3px);
+}
