@@ -2,7 +2,7 @@
 var cameraX = 0;
 var gravity = 0.6;
 var friction = 0.8;
-var livelloMax = 5000; // Lunghezza totale del livello
+var livelloMax = 5600; // Lunghezza totale del livello
 var isGameOver = false;
 var keys = { ArrowRight: false, ArrowLeft: false, ArrowUp: false };
 
@@ -21,7 +21,7 @@ var animatedObject = {
   height: 40,
   x: 50,
   y: 100,
-  jumpPower: -12,
+  jumpPower: -17,
   grounded: false,
   imageList: [],
   contaFrame: 0,
@@ -87,23 +87,23 @@ function startGame() {
     let currentX = 0;
     
     // Genera il livello finché non si raggiunge la fine
-    while (currentX < livelloMax) {
+    while (currentX < livelloMax-40) { // Lascia spazio per il traguardo
         // Genera la lunghezza di questo blocco di prato (tra 200 e 600 pixel)
         let groundWidth = Math.floor(Math.random() * 400) + 200;
         
         // Aggiungi il prato
-        myObstacles.push(new component(groundWidth, 50, "#228B22", currentX, 230, "rect")); // Verde Erba
+        myObstacles.push(new component(groundWidth, 50, "#228B22", currentX, window.innerHeight-50, "rect")); // Verde Erba
         
         // Genera ostacoli sopra questo blocco di prato
         let chance = Math.random();
         if (chance > 0.6) {
             // Piattaforma sospesa (Marrone scuro)
             let platY = Math.floor(Math.random() * 60) + 100; // Altezza tra 100 e 160
-            myObstacles.push(new component(120, 20, "#8B4513", currentX + 50, platY, "rect"));
+            myObstacles.push(new component(120, 20, "#8B4513", currentX + 350, platY, "rect"));
         } else if (chance > 0.3) {
             // Ostacolo stile tubo (Verde lime)
-            let pipeHeight = Math.floor(Math.random() * 50) + 30; // Altezza tra 30 e 80
-            myObstacles.push(new component(50, pipeHeight, "#32CD32", currentX + (groundWidth/2), 230 - pipeHeight, "rect"));
+            let pipeHeight = Math.floor(Math.random() * 50) + 50; // Altezza tra 30 e 80
+            myObstacles.push(new component(50, pipeHeight, "#32CD32", currentX + (groundWidth/2), 400 - pipeHeight, "rect"));
         }
 
         currentX += groundWidth;
@@ -115,17 +115,19 @@ function startGame() {
     }
 
     // Aggiungi l'Asta della Bandiera finale (Traguardo)
-    myObstacles.push(new component(20, 200, "#FFD700", livelloMax, 30, "rect")); // Bandiera d'oro
+    myObstacles.push(new component(20, 100, "#FFD700", livelloMax, 350, "rect")); // Bandiera d'oro
     // Aggiungi un pavimento sicuro per la fine
-    myObstacles.push(new component(800, 50, "#228B22", livelloMax - 100, 230, "rect")); 
+    myObstacles.push(new component(800, 50, "#228B22", livelloMax - 100, 400, "rect"));
+    myObstacles.push(new component(100,-120, "#8B4513", livelloMax + 150, 400, "rect")); // Castello finale per rendere più evidente il traguardo
+    myObstacles.push(new component(25, 30, "#FFD700", livelloMax + 180, 350, "rect")); // Bandiera d'oro sul castello
 }
 
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
         animatedObject.loadImages();  
-        this.canvas.width = 480;
-        this.canvas.height = 270;
+        this.canvas.width = window.innerWidth-50;
+        this.canvas.height = window.innerHeight-25;
         this.canvas.style.backgroundColor = "#6495ED"; // Azzurro "Cornflower Blue" molto bello
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
